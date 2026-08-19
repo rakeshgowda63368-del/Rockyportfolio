@@ -1187,7 +1187,7 @@ function App() {
       )
     ),
 
-    // Contact Section
+    // Contact Section (Large Full-Width LET'S CONNECT Banner)
     h(
       'section',
       { id: 'contact' },
@@ -1196,159 +1196,60 @@ function App() {
         { className: 'container' },
         h(
           'div',
-          { className: 'section-badge' },
-          h('i', { className: 'fas fa-envelope' }),
-          ' Get In Touch'
-        ),
-        h(
-          'h2',
-          { className: 'section-title' },
-          "Let's Build Something ",
-          h('span', { className: 'gradient-text' }, 'Together')
-        ),
-        h(
-          'p',
-          { className: 'section-subtitle' },
-          'Whether you have a job opportunity, project inquiry, or just want to connect, feel free to drop a message.'
-        ),
-        h(
-          'div',
-          { className: 'contact-grid' },
+          { className: 'connect-banner-card' },
           h(
             'div',
-            null,
-            h(
-              'p',
-              { style: { color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.7', marginBottom: '1.5rem' } },
-              'I am actively seeking software engineering, web development, and software testing opportunities. Reach out via email, social links, or submit the contact form.'
-            ),
-            h(
-              'div',
-              { className: 'contact-info-list' },
-              h(
-                'div',
-                { className: 'contact-info-item' },
-                h('div', { className: 'contact-icon' }, h('i', { className: 'fas fa-envelope' })),
-                h(
-                  'div',
-                  null,
-                  h('div', { className: 'contact-label' }, 'Email'),
-                  h('div', { className: 'contact-val' }, 'rakeshgowda63368@gmail.com')
-                )
-              ),
-              h(
-                'div',
-                { className: 'contact-info-item' },
-                h(
-                  'div',
-                  { className: 'contact-icon', style: { background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' } },
-                  h('i', { className: 'fas fa-map-marker-alt' })
-                ),
-                h(
-                  'div',
-                  null,
-                  h('div', { className: 'contact-label' }, 'Location'),
-                  h('div', { className: 'contact-val' }, 'Hirisave, Karnataka, India')
-                )
-              ),
-              h(
-                'div',
-                { className: 'contact-info-item' },
-                h(
-                  'div',
-                  { className: 'contact-icon', style: { background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' } },
-                  h('i', { className: 'fab fa-linkedin-in' })
-                ),
-                h(
-                  'div',
-                  null,
-                  h('div', { className: 'contact-label' }, 'LinkedIn'),
-                  h('div', { className: 'contact-val' }, 'linkedin.com/in/rakesh-gowda-h-n')
-                )
-              )
-            )
+            { className: 'section-badge' },
+            h('i', { className: 'fas fa-paper-plane' }),
+            ' Direct Email Contact'
+          ),
+          h(
+            'h2',
+            { className: 'connect-large-title' },
+            "LET'S CONNECT"
+          ),
+          h(
+            'p',
+            { className: 'connect-subtitle' },
+            "Have an exciting software project, web development role, job opportunity, or technical inquiry? Click below to send me a direct email and let's get in touch!"
+          ),
+          h(
+            'a',
+            {
+              href: 'mailto:rakeshgowda63368@gmail.com',
+              className: 'connect-btn-large'
+            },
+            h('i', { className: 'fas fa-envelope-open-text' }),
+            ' Connect'
           ),
           h(
             'div',
-            { className: 'glass-card', style: { padding: '2rem' } },
-            contactSubmitted &&
-              h(
-                'div',
-                {
-                  style: {
-                    padding: '1rem',
-                    background: 'rgba(16, 185, 129, 0.15)',
-                    border: '1px solid #10b981',
-                    borderRadius: '0.75rem',
-                    color: '#10b981',
-                    marginBottom: '1.5rem',
-                    fontWeight: 600
-                  }
-                },
-                h('i', { className: 'fas fa-check-circle' }),
-                ' Thank you! Your message has been sent successfully. Rakesh will get back to you shortly.'
-              ),
+            { className: 'connect-quick-links' },
             h(
-              'form',
-              { onSubmit: handleContactSubmit },
-              h(
-                'div',
-                { className: 'form-group' },
-                h('label', { className: 'form-label' }, 'Your Name'),
-                h('input', {
-                  type: 'text',
-                  required: true,
-                  className: 'form-input',
-                  placeholder: 'Enter your name',
-                  value: formData.name,
-                  onChange: (e) => setFormData({ ...formData, name: e.target.value })
-                })
-              ),
-              h(
-                'div',
-                { className: 'form-group' },
-                h('label', { className: 'form-label' }, 'Email Address'),
-                h('input', {
-                  type: 'email',
-                  required: true,
-                  className: 'form-input',
-                  placeholder: 'name@example.com',
-                  value: formData.email,
-                  onChange: (e) => setFormData({ ...formData, email: e.target.value })
-                })
-              ),
-              h(
-                'div',
-                { className: 'form-group' },
-                h('label', { className: 'form-label' }, 'Subject'),
-                h('input', {
-                  type: 'text',
-                  required: true,
-                  className: 'form-input',
-                  placeholder: 'Web Development / Software Opportunity',
-                  value: formData.subject,
-                  onChange: (e) => setFormData({ ...formData, subject: e.target.value })
-                })
-              ),
-              h(
-                'div',
-                { className: 'form-group' },
-                h('label', { className: 'form-label' }, 'Message'),
-                h('textarea', {
-                  rows: '4',
-                  required: true,
-                  className: 'form-textarea',
-                  placeholder: 'Write your message here...',
-                  value: formData.message,
-                  onChange: (e) => setFormData({ ...formData, message: e.target.value })
-                })
-              ),
-              h(
-                'button',
-                { type: 'submit', className: 'btn-primary', style: { width: '100%', padding: '1rem' } },
-                h('i', { className: 'fas fa-paper-plane' }),
-                ' Send Message'
-              )
+              'a',
+              {
+                href: 'mailto:rakeshgowda63368@gmail.com',
+                className: 'connect-chip'
+              },
+              h('i', { className: 'fas fa-envelope', style: { color: 'var(--accent-cyan)' } }),
+              ' rakeshgowda63368@gmail.com'
+            ),
+            h(
+              'div',
+              { className: 'connect-chip' },
+              h('i', { className: 'fas fa-map-marker-alt', style: { color: '#8b5cf6' } }),
+              ' Hirisave, Karnataka, India'
+            ),
+            h(
+              'a',
+              {
+                href: 'https://linkedin.com/in/rakesh-gowda-h-n',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'connect-chip'
+              },
+              h('i', { className: 'fab fa-linkedin-in', style: { color: '#10b981' } }),
+              ' linkedin.com/in/rakesh-gowda-h-n'
             )
           )
         )
