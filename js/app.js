@@ -698,7 +698,7 @@ function App() {
                 'div',
                 { style: { display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' } },
                 h('i', { className: 'fas fa-map-marker-alt', style: { color: 'var(--accent-cyan)' } }),
-                ' Karnataka, India'
+                ' Hirisave, Karnataka, India'
               ),
               h(
                 'div',
@@ -1233,7 +1233,7 @@ function App() {
                   'div',
                   null,
                   h('div', { className: 'contact-label' }, 'Email'),
-                  h('div', { className: 'contact-val' }, 'rakeshgowdahn@gmail.com')
+                  h('div', { className: 'contact-val' }, 'rakeshgowda63368@gmail.com')
                 )
               ),
               h(
@@ -1248,7 +1248,7 @@ function App() {
                   'div',
                   null,
                   h('div', { className: 'contact-label' }, 'Location'),
-                  h('div', { className: 'contact-val' }, 'Karnataka, India')
+                  h('div', { className: 'contact-val' }, 'Hirisave, Karnataka, India')
                 )
               ),
               h(
@@ -1487,7 +1487,7 @@ function App() {
               {
                 onClick: () => {
                   navigator.clipboard.writeText(
-                    `Hi, I'm Rakesh Gowda H N\nSoftware Engineer at Navabharath Technologies\nEmail: rakeshgowdahn@gmail.com\nSkills: React.js, JavaScript, HTML, CSS, Python, REST API, MySQL, Postman, Selenium, Hosting & DNS`
+                    `Hi, I'm Rakesh Gowda H N\nSoftware Engineer at Navabharath Technologies\nEmail: rakeshgowda63368@gmail.com\nLocation: Hirisave, Karnataka, India\nSkills: React.js, JavaScript, HTML, CSS, Python, REST API, MySQL, Postman, Selenium, Hosting & DNS`
                   );
                   alert('Resume summary copied to clipboard!');
                 },

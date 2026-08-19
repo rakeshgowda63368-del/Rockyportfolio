@@ -430,11 +430,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-name {
-  font-size: 4rem;
+  font-size: clamp(1.4rem, 5.5vw, 3.8rem);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.2;
   margin-bottom: 1rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .hero-title-wrapper {
@@ -1421,7 +1422,8 @@ footer {
     gap: 3rem;
   }
   .hero-name {
-    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-size: clamp(1.25rem, 5.2vw, 3.2rem);
+    white-space: nowrap;
   }
   .avatar-ring, .avatar-ring-2 {
     display: none;
@@ -1472,7 +1474,8 @@ footer {
   }
 
   .hero-name {
-    font-size: clamp(2rem, 8vw, 2.8rem);
+    font-size: clamp(1.1rem, 5vw, 2.4rem);
+    white-space: nowrap;
   }
 
   .hero-title-wrapper {
