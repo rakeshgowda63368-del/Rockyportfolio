@@ -280,7 +280,7 @@ function App() {
       subtitle: 'Modern Dental Clinic Portal',
       tech: ['HTML', 'CSS', 'JavaScript', 'React.js', 'Hostinger'],
       role: 'Web Design • Development • Deployment',
-      image: './assets/srinivasa_dental.jpg',
+      image: './assets/srinivas clinic.png',
       summary:
         'A modern and responsive dental clinic website designed to showcase dental services, treatments, facilities, and patient care.',
       details: [
@@ -296,7 +296,7 @@ function App() {
       subtitle: 'Digital Queue & Clinic Management System',
       tech: ['React Native', 'JavaScript', 'Node.js', 'REST APIs', 'Azure', 'GitHub', 'HTML', 'CSS'],
       role: 'Software Tester | Manual Testing | API Testing',
-      image: './assets/tokensboy.jpg',
+      image: './assets/tokensboy.png',
       summary:
         'Digital Queue & Clinic Management System featuring end-to-end testing across Doctor and Patient workflows, Node.js REST APIs, real-time sync, Azure servers, and Play Store release validation.',
       details: [
