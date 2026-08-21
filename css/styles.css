@@ -1636,62 +1636,24 @@ footer {
 }
 
 @media (max-width: 768px) {
+  /* Prevent mobile Safari/Chrome auto-zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  .container {
+    padding: 0 1.15rem;
+  }
+
+  /* Compact Mobile Navbar */
   .navbar {
     width: calc(100% - 1.5rem);
-    padding: 0.75rem 1rem;
+    padding: 0.65rem 1rem;
     top: 0.75rem;
+    border-radius: 0.85rem;
   }
 
-  .nav-menu {
-    display: none;
-  }
-
-  .nav-header-ctas {
-    display: none !important;
-  }
-
-  .mobile-menu-btn {
-    display: flex;
-  }
-
-  .nav-brand-text {
-    font-size: 1.1rem;
-  }
-  .nav-brand-sub {
-    font-size: 0.7rem;
-  }
-  .nav-logo-img {
-    width: 38px;
-    height: 38px;
-  }
-
-  section {
-    padding: 4rem 0;
-  }
-
-  .hero {
-    padding-top: 7rem;
-    padding-bottom: 3rem;
-    min-height: auto;
-  }
-
-  .hero-name {
-    font-size: clamp(1.1rem, 5vw, 2.4rem);
-    white-space: nowrap;
-  }
-
-  .hero-title-wrapper {
-    font-size: 1.1rem;
-  }
-
-  .hero-description {
-    font-size: 0.95rem;
-  }
-
-  .nav-menu {
-    display: none;
-  }
-
+  .nav-menu,
   .nav-header-ctas {
     display: none !important;
   }
@@ -1704,12 +1666,6 @@ footer {
 
   .mobile-menu-btn {
     display: flex;
-  }
-
-  .navbar {
-    padding: 0.65rem 1rem;
-    top: 0.75rem;
-    width: calc(100% - 1.5rem);
   }
 
   .nav-brand-text {
@@ -1725,33 +1681,56 @@ footer {
     height: 36px;
   }
 
+  /* Section Padding */
+  section {
+    padding: 3.75rem 0;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding-top: 6.75rem;
+    padding-bottom: 2.75rem;
+    min-height: auto;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2.5rem;
+    gap: 2.25rem;
   }
 
   .hero-greeting {
     justify-content: center;
   }
 
+  .hero-status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
   .hero-greeting-text {
     font-size: 0.78rem;
+    letter-spacing: 0.03em;
   }
 
   .hero-name {
-    font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+    font-size: clamp(1.8rem, 7.5vw, 2.6rem);
     white-space: normal;
     word-break: normal;
+    line-height: 1.2;
+    margin-bottom: 0.85rem;
   }
 
   .hero-title-wrapper {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     justify-content: center;
+    min-height: 2.2rem;
+    margin-bottom: 1.25rem;
   }
 
   .hero-description {
     font-size: 0.95rem;
+    line-height: 1.65;
     max-width: 520px;
     margin: 0 auto 1.75rem auto;
   }
@@ -1760,25 +1739,30 @@ footer {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-ctas .btn-primary,
   .hero-ctas .btn-emerald,
   .hero-ctas .btn-outline {
     width: 100%;
-    min-height: 46px;
+    min-height: 48px;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0.85rem;
   }
 
   .hero-social-links {
     justify-content: center;
-    gap: 0.6rem;
-    margin-bottom: 2rem;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
     flex-wrap: wrap;
   }
 
   .hero-social-btn {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.85rem;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.95rem;
+    min-height: 38px;
   }
 
   .hero-avatar-container {
@@ -1786,14 +1770,19 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
   }
 
   .avatar-img-wrapper {
     width: 190px;
     height: 190px;
+    border-radius: 1.5rem;
     margin: 0 auto;
+  }
+
+  .avatar-ring, .avatar-ring-2 {
+    display: none;
   }
 
   .hero-floating-badge {
@@ -1801,40 +1790,61 @@ footer {
     inset: auto !important;
     width: 100%;
     max-width: 320px;
-    margin-top: 0.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  }
-
-  .section-title {
-    font-size: clamp(1.75rem, 6vw, 2.25rem);
-  }
-
-  .section-subtitle {
-    font-size: 0.98rem;
-    margin-bottom: 2rem;
+    margin-top: 0.35rem;
+    animation: none;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
   }
 
   .hero-stats {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
     padding: 0.85rem 0.5rem;
+    margin-top: 0.5rem;
   }
 
   .stat-item h3 {
     font-size: 1.35rem;
   }
+
   .stat-item p {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
+    line-height: 1.3;
   }
 
+  /* Section Titles & Badges */
+  .section-badge {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* Services Grid */
   .what-i-do-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .service-card {
+    padding: 1.25rem;
+    border-radius: 0.9rem;
   }
 
   .service-card[style*="gridColumn"] {
     grid-column: span 1 !important;
   }
 
+  /* Skills Filter Bar & Grid */
   .skills-filter {
     display: flex;
     overflow-x: auto;
@@ -1845,6 +1855,7 @@ footer {
     -ms-overflow-style: none;
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
   }
 
   .skills-filter::-webkit-scrollbar {
@@ -1853,53 +1864,148 @@ footer {
 
   .filter-btn {
     flex-shrink: 0;
-    padding: 0.55rem 1.15rem;
+    padding: 0.55rem 1.1rem;
     min-height: 42px;
     font-size: 0.85rem;
   }
 
   .skills-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
+  .skill-card {
+    padding: 1.15rem;
+    border-radius: 0.9rem;
+  }
+
+  /* Projects Showcase */
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
+  .project-img-wrapper {
+    height: 190px;
+  }
+
+  .project-body {
+    padding: 1.35rem;
+  }
+
+  .project-title {
+    font-size: 1.35rem;
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+  }
+
+  /* Timeline */
   .timeline::before {
-    left: 1rem;
-  }
-  .timeline-item {
-    padding-left: 2.75rem;
-  }
-  .timeline-dot {
-    left: 0.35rem;
+    left: 0.85rem;
   }
 
+  .timeline-item {
+    padding-left: 2.35rem;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-dot {
+    left: 0.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    top: 1.25rem;
+  }
+
+  .timeline-content {
+    padding: 1.35rem;
+    border-radius: 1rem;
+  }
+
+  .timeline-role {
+    font-size: 1.25rem;
+  }
+
+  .timeline-company {
+    font-size: 1rem;
+  }
+
+  /* QA Lab Playground */
   .postman-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    padding: 0.85rem 1rem;
   }
 
   .postman-body {
-    padding: 1.25rem;
+    padding: 1.15rem;
   }
 
   .endpoint-selector-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.5rem;
   }
 
   .url-input-display {
     font-size: 0.8rem;
     word-break: break-all;
+    padding: 0.65rem 0.85rem;
   }
 
+  .qa-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .qa-code-block {
+    font-size: 0.78rem;
+    max-height: 220px;
+  }
+
+  /* Connect Hero Card & Contact Form */
+  .connect-hero-card {
+    padding: 2.25rem 1.25rem;
+    border-radius: 1.5rem;
+  }
+
+  .connect-large-title {
+    font-size: clamp(1.75rem, 7vw, 2.4rem);
+  }
+
+  .connect-action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .connect-btn-primary,
+  .connect-btn-secondary,
+  .connect-btn-resume {
+    width: 100%;
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    min-height: 48px;
+    font-size: 16px !important; /* Prevents mobile Safari auto-zoom */
+    padding: 0.85rem 1rem;
+  }
+
+  /* Modals */
   .modal-content {
-    padding: 1.5rem 1.25rem;
-    max-height: 85vh;
+    padding: 1.5rem 1.15rem;
+    max-height: 88vh;
     border-radius: 1.25rem;
+    width: calc(100% - 1.25rem);
   }
 }
 
@@ -2861,16 +2967,16 @@ footer {
 /* Extra Small Phones Responsive (width <= 480px) */
 @media (max-width: 480px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 0.9rem;
   }
 
   section {
-    padding: 4rem 0;
+    padding: 3.25rem 0;
   }
 
   .hero {
-    padding-top: 6.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 6.25rem;
+    padding-bottom: 2.25rem;
   }
 
   .avatar-img-wrapper {
@@ -2878,58 +2984,50 @@ footer {
     height: 170px;
   }
 
-  .avatar-ring {
-    inset: -8px;
-  }
-
-  .avatar-ring-2 {
-    inset: -16px;
-  }
-
   .hero-floating-badge {
-    padding: 0.65rem 0.9rem;
+    padding: 0.65rem 0.85rem;
     gap: 0.65rem;
   }
 
   .badge-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 0.95rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
   }
 
   .badge-text-title {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
 
   .badge-text-sub {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
 
   .hero-stats {
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-    padding: 0.75rem 0.35rem;
+    gap: 0.25rem;
+    padding: 0.75rem 0.25rem;
   }
 
   .stat-item h3 {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 
   .stat-item p {
-    font-size: 0.65rem;
+    font-size: 0.64rem;
   }
 
   .connect-hero-card {
-    padding: 2rem 1rem;
+    padding: 1.75rem 0.95rem;
     border-radius: 1.25rem;
   }
 
   .connect-large-title {
-    font-size: clamp(2rem, 8.5vw, 2.75rem);
+    font-size: clamp(1.65rem, 8vw, 2.25rem);
   }
 
   .connect-subtitle {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .connect-action-buttons {
@@ -2941,21 +3039,25 @@ footer {
   .connect-btn-secondary,
   .connect-btn-resume {
     width: 100%;
-    padding: 0.85rem 1rem;
+    padding: 0.85rem 0.85rem;
     font-size: 0.9rem;
   }
 
   .connect-cards-grid {
     grid-template-columns: 1fr;
-    gap: 0.85rem;
+    gap: 0.75rem;
   }
 
   .connect-feature-card {
-    padding: 1.15rem;
+    padding: 1rem;
   }
 
   .feature-value {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .timeline-content {
+    padding: 1.15rem 1rem;
   }
 }
 
