@@ -2,7 +2,7 @@
 const { useState, useEffect, useRef, createElement: h } = React;
 
 // Particle Canvas Background Engine
-function CanvasBackground() {
+function CanvasBackground({ theme = 'dark' }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -32,7 +32,9 @@ function CanvasBackground() {
         this.vx = (Math.random() - 0.5) * (isMobile ? 0.4 : 0.6);
         this.vy = (Math.random() - 0.5) * (isMobile ? 0.4 : 0.6);
         this.radius = Math.random() * (isMobile ? 1.5 : 2) + 1;
-        this.color = Math.random() > 0.5 ? '#00f2fe' : '#8b5cf6';
+        this.color = theme === 'light'
+          ? (Math.random() > 0.5 ? '#0284c7' : '#7c3aed')
+          : (Math.random() > 0.5 ? '#00f2fe' : '#8b5cf6');
       }
 
       update() {
@@ -48,7 +50,7 @@ function CanvasBackground() {
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         if (!isMobile) {
-          ctx.shadowBlur = 8;
+          ctx.shadowBlur = theme === 'light' ? 4 : 8;
           ctx.shadowColor = this.color;
         }
         ctx.fill();
@@ -98,8 +100,10 @@ function CanvasBackground() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(0, 242, 254, ${1 - dist / maxDist * 0.75})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = theme === 'light'
+              ? `rgba(2, 132, 199, ${(1 - dist / maxDist) * 0.25})`
+              : `rgba(0, 242, 254, ${(1 - dist / maxDist) * 0.75})`;
+            ctx.lineWidth = theme === 'light' ? 0.6 : 0.5;
             ctx.stroke();
           }
         }
@@ -112,8 +116,10 @@ function CanvasBackground() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${1 - mdist / 150 * 0.8})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = theme === 'light'
+              ? `rgba(124, 58, 237, ${(1 - mdist / 150) * 0.35})`
+              : `rgba(139, 92, 246, ${(1 - mdist / 150) * 0.8})`;
+            ctx.lineWidth = theme === 'light' ? 0.9 : 0.8;
             ctx.stroke();
           }
         }
@@ -130,13 +136,14 @@ function CanvasBackground() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [theme]);
 
   return h('canvas', { id: 'bg-canvas', ref: canvasRef });
 }
 
 // Main Application Component
 function App() {
+  const [theme, setTheme] = useState(() => localStorage.getItem('portfolio_theme') || 'dark');
   const [activeTab, setActiveTab] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
   const [showResumeModal, setShowResumeModal] = useState(false);
@@ -144,6 +151,16 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('portfolio_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // QA Lab State
   const [selectedApiEndpoint, setSelectedApiEndpoint] = useState('GET_PROJECTS');
@@ -247,7 +264,7 @@ function App() {
       subtitle: 'Modern Healthcare & Patient Care Platform',
       tech: ['HTML', 'CSS', 'JavaScript', 'React.js'],
       role: 'Web Design & Development',
-      image: './assets/madhuram_chowdry.jpg',
+      image: './assets/madhuram_chowdry.png',
       summary:
         "A modern and responsive healthcare website designed to showcase the doctor's expertise, services, facilities, and patient care.",
       details: [
@@ -377,12 +394,19 @@ function App() {
     setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
+  const handleCopyEmail = (e) => {
+    if (e) e.preventDefault();
+    navigator.clipboard.writeText('rakeshgowda63368@gmail.com');
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return h(
     'div',
     null,
-    h(CanvasBackground),
+    h(CanvasBackground, { theme }),
     h('div', { className: 'glow-spot-1' }),
     h('div', { className: 'glow-spot-2' }),
 
@@ -397,14 +421,14 @@ function App() {
           src: './assets/rg logo.png',
           alt: 'RG Logo',
           className: 'nav-logo-img',
-          width: '44',
-          height: '44',
+          width: '40',
+          height: '40',
           loading: 'eager',
           decoding: 'async'
         }),
         h(
           'div',
-          null,
+          { className: 'nav-brand-info' },
           h('div', { className: 'nav-brand-text' }, 'Rakesh Gowda'),
           h('div', { className: 'nav-brand-sub' }, 'Software Engineer')
         )
@@ -425,15 +449,29 @@ function App() {
       // Desktop Header Action Buttons
       h(
         'div',
-        { className: 'nav-header-ctas', style: { display: 'flex', gap: '0.75rem' } },
+        { className: 'nav-header-ctas' },
         h(
           'button',
           {
-            onClick: () => setShowResumeModal(true),
-            className: 'btn-outline',
-            style: { padding: '0.6rem 1.2rem', fontSize: '0.85rem' }
+            onClick: toggleTheme,
+            className: 'theme-toggle-btn',
+            'aria-label': `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`,
+            title: `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`
           },
-          h('i', { className: 'fas fa-file-download' }),
+          h('i', { className: theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon' }),
+          h('span', { className: 'theme-btn-label' }, theme === 'dark' ? 'Light' : 'Dark')
+        ),
+        h(
+          'a',
+          {
+            href: './assets/Rakesh Gowda H N - Resume.pdf',
+            download: 'Rakesh Gowda H N - Resume.pdf',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            className: 'btn-outline',
+            style: { padding: '0.55rem 1rem', fontSize: '0.85rem', textDecoration: 'none' }
+          },
+          h('i', { className: 'fas fa-file-pdf', style: { color: 'var(--accent-cyan)' } }),
           ' Resume'
         ),
         h(
@@ -441,23 +479,37 @@ function App() {
           {
             href: '#contact',
             className: 'btn-primary',
-            style: { padding: '0.6rem 1.2rem', fontSize: '0.85rem' }
+            style: { padding: '0.55rem 1.1rem', fontSize: '0.85rem' }
           },
           'Get In Touch'
         )
       ),
 
-      // Mobile Menu Hamburger Button
+      // Mobile Menu Actions (Theme Toggle + Hamburger)
       h(
-        'button',
-        {
-          className: `mobile-menu-btn ${isMobileMenuOpen ? 'open' : ''}`,
-          onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen),
-          'aria-label': 'Toggle Navigation Menu'
-        },
-        h('span', { className: 'hamburger-line' }),
-        h('span', { className: 'hamburger-line' }),
-        h('span', { className: 'hamburger-line' })
+        'div',
+        { className: 'mobile-nav-actions' },
+        h(
+          'button',
+          {
+            onClick: toggleTheme,
+            className: 'theme-toggle-btn mobile-theme-btn',
+            'aria-label': `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`,
+            title: `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`
+          },
+          h('i', { className: theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon' })
+        ),
+        h(
+          'button',
+          {
+            className: `mobile-menu-btn ${isMobileMenuOpen ? 'open' : ''}`,
+            onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen),
+            'aria-label': 'Toggle Navigation Menu'
+          },
+          h('span', { className: 'hamburger-line' }),
+          h('span', { className: 'hamburger-line' }),
+          h('span', { className: 'hamburger-line' })
+        )
       )
     ),
 
@@ -484,6 +536,20 @@ function App() {
         )
       ),
       h(
+        'div',
+        {
+          className: 'mobile-drawer-theme-bar',
+          onClick: toggleTheme
+        },
+        h(
+          'div',
+          { className: 'mobile-theme-info' },
+          h('i', { className: theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun', style: { color: 'var(--accent-cyan)' } }),
+          h('span', null, theme === 'dark' ? 'Dark Mode' : 'Light Mode')
+        ),
+        h('span', { className: 'mobile-theme-badge' }, theme === 'dark' ? 'Switch to Light ☀️' : 'Switch to Dark 🌙')
+      ),
+      h(
         'ul',
         { className: 'mobile-nav-list' },
         h('li', null, h('a', { href: '#about', className: 'mobile-nav-link', onClick: closeMobileMenu }, h('i', { className: 'fas fa-user-astronaut' }), 'About Me')),
@@ -497,6 +563,20 @@ function App() {
         'div',
         { className: 'mobile-drawer-ctas' },
         h(
+          'a',
+          {
+            href: './assets/Rakesh Gowda H N - Resume.pdf',
+            download: 'Rakesh Gowda H N - Resume.pdf',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            onClick: closeMobileMenu,
+            className: 'btn-outline',
+            style: { width: '100%', padding: '0.8rem', textDecoration: 'none' }
+          },
+          h('i', { className: 'fas fa-file-pdf', style: { color: 'var(--accent-cyan)' } }),
+          ' Download Resume (PDF)'
+        ),
+        h(
           'button',
           {
             onClick: () => {
@@ -506,8 +586,8 @@ function App() {
             className: 'btn-outline',
             style: { width: '100%', padding: '0.8rem' }
           },
-          h('i', { className: 'fas fa-file-download' }),
-          ' View & Copy Resume'
+          h('i', { className: 'fas fa-eye' }),
+          ' View Resume Summary'
         ),
         h(
           'a',
@@ -575,10 +655,60 @@ function App() {
                 ' Launch Testing Lab'
               ),
               h(
+                'a',
+                {
+                  href: './assets/Rakesh Gowda H N - Resume.pdf',
+                  download: 'Rakesh Gowda H N - Resume.pdf',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'btn-outline'
+                },
+                h('i', { className: 'fas fa-file-pdf', style: { color: 'var(--accent-cyan)' } }),
+                ' Download Resume'
+              ),
+              h(
                 'button',
-                { onClick: () => setShowResumeModal(true), className: 'btn-outline' },
-                h('i', { className: 'fas fa-file-code' }),
-                ' View Resume'
+                { onClick: () => setShowResumeModal(true), className: 'btn-outline', title: 'Quick Resume Summary' },
+                h('i', { className: 'fas fa-eye' }),
+                ' Preview'
+              )
+            ),
+            h(
+              'div',
+              { className: 'hero-social-links' },
+              h(
+                'a',
+                {
+                  href: 'https://github.com/rakeshgowda63368-del',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'hero-social-btn btn-gh',
+                  'aria-label': 'GitHub Profile'
+                },
+                h('i', { className: 'fab fa-github' }),
+                h('span', null, 'GitHub')
+              ),
+              h(
+                'a',
+                {
+                  href: 'https://www.linkedin.com/in/rakesh-gowda-h-n-5572b4349/',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'hero-social-btn btn-in',
+                  'aria-label': 'LinkedIn Profile'
+                },
+                h('i', { className: 'fab fa-linkedin-in' }),
+                h('span', null, 'LinkedIn')
+              ),
+              h(
+                'a',
+                {
+                  href: 'mailto:rakeshgowda63368@gmail.com',
+                  className: 'hero-social-btn',
+                  'aria-label': 'Send Email'
+                },
+                h('i', { className: 'fas fa-envelope', style: { color: 'var(--accent-cyan)' } }),
+                h('span', null, 'Email')
               )
             ),
             h(
@@ -705,6 +835,33 @@ function App() {
                 { style: { display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' } },
                 h('i', { className: 'fas fa-briefcase', style: { color: 'var(--accent-emerald)' } }),
                 ' Navabharath Technologies'
+              )
+            ),
+            h(
+              'div',
+              { style: { marginTop: '1.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' } },
+              h(
+                'a',
+                {
+                  href: './assets/Rakesh Gowda H N - Resume.pdf',
+                  download: 'Rakesh Gowda H N - Resume.pdf',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'btn-outline',
+                  style: { fontSize: '0.85rem', padding: '0.55rem 1.1rem', textDecoration: 'none' }
+                },
+                h('i', { className: 'fas fa-file-pdf', style: { color: 'var(--accent-cyan)' } }),
+                ' Download Official Resume (PDF)'
+              ),
+              h(
+                'button',
+                {
+                  onClick: () => setShowResumeModal(true),
+                  className: 'btn-outline',
+                  style: { fontSize: '0.85rem', padding: '0.55rem 1.1rem' }
+                },
+                h('i', { className: 'fas fa-eye' }),
+                ' Quick Summary'
               )
             )
           ),
@@ -1187,69 +1344,192 @@ function App() {
       )
     ),
 
-    // Contact Section (Large Full-Width LET'S CONNECT Banner)
+    // Contact Section (Ultra Modern Interactive LET'S CONNECT Hub)
     h(
       'section',
-      { id: 'contact' },
+      { id: 'contact', className: 'connect-section-wrapper' },
       h(
         'div',
         { className: 'container' },
         h(
           'div',
-          { className: 'connect-banner-card' },
+          { className: 'connect-hero-card' },
+          // Decorative background ambient light spots
+          h('div', { className: 'connect-ambient-glow-1' }),
+          h('div', { className: 'connect-ambient-glow-2' }),
+
+          // Header Top Bar with Live Status & Response Time Badges
           h(
             'div',
-            { className: 'section-badge' },
-            h('i', { className: 'fas fa-paper-plane' }),
-            ' Direct Email Contact'
+            { className: 'connect-status-bar' },
+            h(
+              'div',
+              { className: 'connect-status-badge' },
+              h('span', { className: 'status-pulse-dot' }),
+              h('span', null, 'AVAILABLE FOR OPPORTUNITIES & PROJECTS')
+            ),
+            h(
+              'div',
+              { className: 'connect-response-badge' },
+              h('i', { className: 'fas fa-bolt', style: { color: 'var(--accent-cyan)' } }),
+              h('span', null, 'Quick Response • < 24 Hours')
+            )
           ),
-          h(
-            'h2',
-            { className: 'connect-large-title' },
-            "LET'S CONNECT"
-          ),
-          h(
-            'p',
-            { className: 'connect-subtitle' },
-            "Have an exciting software project, web development role, job opportunity, or technical inquiry? Click below to send me a direct email and let's get in touch!"
-          ),
-          h(
-            'a',
-            {
-              href: 'mailto:rakeshgowda63368@gmail.com',
-              className: 'connect-btn-large'
-            },
-            h('i', { className: 'fas fa-envelope-open-text' }),
-            ' Connect'
-          ),
+
+          // Central Typography & Intro
           h(
             'div',
-            { className: 'connect-quick-links' },
+            { className: 'connect-main-intro' },
+            h(
+              'div',
+              { className: 'section-badge', style: { marginBottom: '0.85rem' } },
+              h('i', { className: 'fas fa-paper-plane' }),
+              ' DIRECT CONTACT & COLLABORATION'
+            ),
+            h(
+              'h2',
+              { className: 'connect-large-title' },
+              "LET'S CONNECT"
+            ),
+            h(
+              'p',
+              { className: 'connect-subtitle' },
+              "Have an exciting software project, web development role, job opening, or technical inquiry? Let's discuss how we can build high-impact digital solutions together."
+            ),
+
+            // Primary Quick Action Buttons Bar
+            h(
+              'div',
+              { className: 'connect-action-buttons' },
+              h(
+                'a',
+                {
+                  href: 'mailto:rakeshgowda63368@gmail.com',
+                  className: 'connect-btn-primary'
+                },
+                h('i', { className: 'fas fa-envelope-open-text' }),
+                ' Send Direct Email'
+              ),
+              h(
+                'button',
+                {
+                  onClick: handleCopyEmail,
+                  className: `connect-btn-secondary ${copiedEmail ? 'copied' : ''}`
+                },
+                h('i', { className: copiedEmail ? 'fas fa-check-circle' : 'fas fa-copy' }),
+                copiedEmail ? ' Email Copied to Clipboard!' : ' Copy Email Address'
+              ),
+              h(
+                'a',
+                {
+                  href: './assets/Rakesh Gowda H N - Resume.pdf',
+                  download: 'Rakesh Gowda H N - Resume.pdf',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'connect-btn-resume'
+                },
+                h('i', { className: 'fas fa-file-pdf' }),
+                ' Download Resume'
+              )
+            )
+          ),
+
+          // 4 Feature Grid Cards
+          h(
+            'div',
+            { className: 'connect-cards-grid' },
+            // Card 1: Email
             h(
               'a',
               {
                 href: 'mailto:rakeshgowda63368@gmail.com',
-                className: 'connect-chip'
+                className: 'connect-feature-card email-card'
               },
-              h('i', { className: 'fas fa-envelope', style: { color: 'var(--accent-cyan)' } }),
-              ' rakeshgowda63368@gmail.com'
+              h(
+                'div',
+                { className: 'feature-card-header' },
+                h(
+                  'div',
+                  { className: 'feature-icon-box icon-cyan' },
+                  h('i', { className: 'fas fa-envelope' })
+                ),
+                h('span', { className: 'feature-action-link' }, 'Send Mail ', h('i', { className: 'fas fa-arrow-right' }))
+              ),
+              h('div', { className: 'feature-label' }, 'Direct Email Inbox'),
+              h('div', { className: 'feature-value' }, 'rakeshgowda63368@gmail.com'),
+              h('div', { className: 'feature-sub' }, 'Primary inbox for opportunities & collaborations')
             ),
-            h(
-              'div',
-              { className: 'connect-chip' },
-              h('i', { className: 'fas fa-map-marker-alt', style: { color: '#8b5cf6' } }),
-              ' Hirisave, Karnataka, India'
-            ),
+
+            // Card 2: LinkedIn
             h(
               'a',
               {
-                href: 'https://linkedin.com/in/rakesh-gowda-h-n',
+                href: 'https://www.linkedin.com/in/rakesh-gowda-h-n-5572b4349/',
                 target: '_blank',
                 rel: 'noopener noreferrer',
-                className: 'connect-chip'
+                className: 'connect-feature-card linkedin-card'
               },
-              h('i', { className: 'fab fa-linkedin-in', style: { color: '#10b981' } }),
-              ' linkedin.com/in/rakesh-gowda-h-n'
+              h(
+                'div',
+                { className: 'feature-card-header' },
+                h(
+                  'div',
+                  { className: 'feature-icon-box icon-blue' },
+                  h('i', { className: 'fab fa-linkedin-in' })
+                ),
+                h('span', { className: 'feature-action-link' }, 'Connect ', h('i', { className: 'fas fa-arrow-right' }))
+              ),
+              h('div', { className: 'feature-label' }, 'LinkedIn Profile'),
+              h('div', { className: 'feature-value' }, 'Rakesh Gowda H N'),
+              h('div', { className: 'feature-sub' }, 'Software Engineer • Navabharath Technologies')
+            ),
+
+            // Card 3: GitHub
+            h(
+              'a',
+              {
+                href: 'https://github.com/rakeshgowda63368-del',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'connect-feature-card github-card'
+              },
+              h(
+                'div',
+                { className: 'feature-card-header' },
+                h(
+                  'div',
+                  { className: 'feature-icon-box icon-purple' },
+                  h('i', { className: 'fab fa-github' })
+                ),
+                h('span', { className: 'feature-action-link' }, 'View Repos ', h('i', { className: 'fas fa-arrow-right' }))
+              ),
+              h('div', { className: 'feature-label' }, 'GitHub Profile'),
+              h('div', { className: 'feature-value' }, 'rakeshgowda63368-del'),
+              h('div', { className: 'feature-sub' }, 'Explore web app source codes & automated test scripts')
+            ),
+
+            // Card 4: Location & Work Mode
+            h(
+              'div',
+              { className: 'connect-feature-card location-card' },
+              h(
+                'div',
+                { className: 'feature-card-header' },
+                h(
+                  'div',
+                  { className: 'feature-icon-box icon-emerald' },
+                  h('i', { className: 'fas fa-map-marker-alt' })
+                ),
+                h(
+                  'span',
+                  { className: 'status-pill-emerald' },
+                  h('span', { className: 'mini-pulse-dot' }),
+                  'Open for Remote & Onsite'
+                )
+              ),
+              h('div', { className: 'feature-label' }, 'Current Base Location'),
+              h('div', { className: 'feature-value' }, 'Hirisave, Karnataka, India'),
+              h('div', { className: 'feature-sub' }, 'Timezone: IST (UTC+5:30) • Ready for global roles')
             )
           )
         )
@@ -1276,6 +1556,44 @@ function App() {
             decoding: 'async'
           }),
           h('span', { className: 'nav-brand-text' }, 'Rakesh Gowda H N')
+        ),
+        h(
+          'div',
+          { className: 'footer-social-links' },
+          h(
+            'a',
+            {
+              href: 'https://github.com/rakeshgowda63368-del',
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              className: 'footer-social-link',
+              'aria-label': 'GitHub'
+            },
+            h('i', { className: 'fab fa-github' }),
+            ' GitHub'
+          ),
+          h(
+            'a',
+            {
+              href: 'https://www.linkedin.com/in/rakesh-gowda-h-n-5572b4349/',
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              className: 'footer-social-link',
+              'aria-label': 'LinkedIn'
+            },
+            h('i', { className: 'fab fa-linkedin-in', style: { color: '#0077b5' } }),
+            ' LinkedIn'
+          ),
+          h(
+            'a',
+            {
+              href: 'mailto:rakeshgowda63368@gmail.com',
+              className: 'footer-social-link',
+              'aria-label': 'Email'
+            },
+            h('i', { className: 'fas fa-envelope', style: { color: 'var(--accent-cyan)' } }),
+            ' Email'
+          )
         ),
         h('p', null, '© 2026 Rakesh Gowda H N. All rights reserved. Crafted with React, HTML5 & Custom CSS.')
       )
@@ -1382,20 +1700,45 @@ function App() {
           ),
           h(
             'div',
-            { style: { display: 'flex', gap: '1rem', marginTop: '1.25rem', justifyContent: 'flex-end', flexWrap: 'wrap' } },
+            { style: { display: 'flex', gap: '0.75rem', marginTop: '1.25rem', justifyContent: 'flex-end', flexWrap: 'wrap', alignItems: 'center' } },
+            h(
+              'a',
+              {
+                href: './assets/Rakesh Gowda H N - Resume.pdf',
+                download: 'Rakesh Gowda H N - Resume.pdf',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'btn-primary',
+                style: { textDecoration: 'none' }
+              },
+              h('i', { className: 'fas fa-file-pdf' }),
+              ' Download PDF Resume'
+            ),
+            h(
+              'a',
+              {
+                href: './assets/Rakesh Gowda H N - Resume.pdf',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'btn-outline',
+                style: { textDecoration: 'none' }
+              },
+              h('i', { className: 'fas fa-external-link-alt' }),
+              ' Open PDF'
+            ),
             h(
               'button',
               {
                 onClick: () => {
                   navigator.clipboard.writeText(
-                    `Hi, I'm Rakesh Gowda H N\nSoftware Engineer at Navabharath Technologies\nEmail: rakeshgowda63368@gmail.com\nLocation: Hirisave, Karnataka, India\nSkills: React.js, JavaScript, HTML, CSS, Python, REST API, MySQL, Postman, Selenium, Hosting & DNS`
+                    `Hi, I'm Rakesh Gowda H N\nSoftware Engineer at Navabharath Technologies\nEmail: rakeshgowda63368@gmail.com\nLinkedIn: https://www.linkedin.com/in/rakesh-gowda-h-n-5572b4349/\nLocation: Hirisave, Karnataka, India\nSkills: React.js, JavaScript, HTML, CSS, Python, REST API, MySQL, Postman, Selenium, Hosting & DNS`
                   );
                   alert('Resume summary copied to clipboard!');
                 },
-                className: 'btn-primary'
+                className: 'btn-outline'
               },
               h('i', { className: 'fas fa-copy' }),
-              ' Copy Resume Text'
+              ' Copy Text'
             ),
             h(
               'button',
